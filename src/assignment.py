@@ -69,8 +69,8 @@ def create_training_data() -> list[nltk.FreqDist]:
     """
 
     training_documents = [
-        "philosophy_train.txt", "sports_train.txt",
-        "mystery_train.txt", "religion_train.txt",
+        # "philosophy_train.txt", "sports_train.txt",
+        # "mystery_train.txt", "religion_train.txt",
         "science_train.txt", "romance_train.txt",
         "horror_train.txt", "science-fiction_train.txt"]
 

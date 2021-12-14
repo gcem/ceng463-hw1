@@ -16,19 +16,15 @@ def read_file(filename) -> list[str]:
     Returns
     --------
     lines: list[str]
+        The lines of the file.
     """
 
     with open(filename, "r") as f:
         # read the lines
         lines = f.readlines()
-        # trim whitespace
-        lines = [line.strip() for line in lines]
-        # duplicate title lines
-        lines = [
-            line + ' ' + line if i % 2 == 0
-            else line for i, line in enumerate(lines)]
-
-        return lines
+    # trim whitespace
+    lines = [line.strip() for line in lines]
+    return lines
 
 
 def preprocess(lines) -> nltk.FreqDist:
@@ -38,7 +34,7 @@ def preprocess(lines) -> nltk.FreqDist:
     Parameters
     -----------
     lines: list[str]
-        The lines to preprocess.
+        The text to preprocess.
 
     Returns
     --------
@@ -46,18 +42,17 @@ def preprocess(lines) -> nltk.FreqDist:
         The frequency distribution of words.
     """
 
-    # remove punctuation
-    lines = [line.translate(str.maketrans(
-        '', '', '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~')) for line in lines]
+    # duplicate title lines
+    lines = lines[::2] * 2 + lines[1::2]
+    # join all lines
+    text = ' '.join(lines)
 
-    # convert to lowercase
-    lines = [line.lower() for line in lines]
+    tokens = nltk.word_tokenize(text)
 
-    # split into words
-    lines = " ".join(lines).split()
+    # TODO: convert to lowercase?
 
     # count the number of occurrences of each word
-    word_frequency = nltk.FreqDist(lines)
+    word_frequency = nltk.FreqDist(tokens)
 
     return word_frequency
 

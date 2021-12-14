@@ -23,6 +23,10 @@ def read_file(filename) -> list[str]:
         lines = f.readlines()
         # trim whitespace
         lines = [line.strip() for line in lines]
+        # duplicate title lines
+        lines = [
+            line + ' ' + line if i % 2 == 0
+            else line for i, line in enumerate(lines)]
 
         return lines
 
@@ -101,5 +105,34 @@ def create_training_data() -> list[nltk.FreqDist]:
     }
 
 
+def build_bayes_classifier(training_data) -> NaiveBayesClassifier:
+    """
+    Build a Naive Bayes classifier from the training data.
+
+    Parameters
+    -----------
+    training_data: dict[str, nltk.FreqDist]
+        Third item returned from create_training_data() 
+
+    Returns
+    --------
+    classifier: NaiveBayesClassifier
+        The classifier.
+    """
+
+    # get the frequency distribution of each category
+    category_frequency = training_data["c"]
+    # get the frequency distribution of the words in the whole training set
+    total_word_frequency = training_data["w"]
+    # get the frequency distribution of the words in each category
+    category_word_frequency = training_data["cw"]
+
+    item_dict = [(dict(i[1]), i[0]) for i in category_word_frequency.items()]
+
+    classifier = NaiveBayesClassifier.train(item_dict)
+    return classifier
+
+
 if __name__ == "__main__":
     training_result = create_training_data()
+    classifier = build_bayes_classifier(training_result)

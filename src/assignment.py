@@ -1,8 +1,27 @@
 import nltk
 import pickle
+import os
 
 from nltk.classify import NaiveBayesClassifier
 from nltk.classify import SklearnClassifier
+
+log_file = ''
+
+
+def log(item):
+    """
+    Log the item to the log file and print it to the console.
+
+    Parameters
+    -----------
+    item: str
+        The item to log.
+    """
+
+    print(item)
+    with open(log_file, "a") as f:
+        f.write(item)
+        f.write("\n")
 
 
 def read_file(filename) -> list[str]:
@@ -49,11 +68,6 @@ def preprocess(lines) -> list[nltk.FreqDist]:
 
     tokens = [nltk.word_tokenize(line) for line in lines]
     features = [nltk.FreqDist(line) for line in tokens]
-
-    # TODO: convert to lowercase?
-
-    # count the number of occurrences of each word
-    # word_frequency = nltk.FreqDist(tokens)
 
     return features
 
@@ -144,10 +158,10 @@ def test_classifier(classifier, test_data: list[(nltk.FreqDist, str)]):
 
     correct = [a[0] == a[1] for a in zip(predicted_labels, correct_labels)]
     accuracy = sum(correct) / len(correct)
-    print('Accuracy:', accuracy)
+    log('Accuracy: ' + str(accuracy))
 
     confusion_matrix = nltk.ConfusionMatrix(correct_labels, predicted_labels)
-    print(confusion_matrix)
+    log(confusion_matrix.pretty_format())
 
 
 def build_bayes_classifier(training_data: list[(nltk.FreqDist, str)]) -> NaiveBayesClassifier:
@@ -172,11 +186,17 @@ def build_bayes_classifier(training_data: list[(nltk.FreqDist, str)]) -> NaiveBa
 if __name__ == "__main__":
     filename = 'cache/classifier_bayes_simple.pickle'
 
+    name = filename.split('.')[0].split('/')[-1]
+    log_file = 'logs/' + name + '.log'
+    # delete the log file if it exists
+    if os.path.exists(log_file):
+        os.remove(log_file)
+
     # try to load the classifier from the cache
     try:
         with open(filename, 'rb') as f:
             classifier = pickle.load(f)
-        print('Loaded classifier from cache.')
+        log('Loaded classifier from cache.')
     except FileNotFoundError:
         # create the classifier
         training_data = create_training_data()
@@ -184,7 +204,7 @@ if __name__ == "__main__":
         # save the classifier to the cache
         with open(filename, 'wb') as f:
             pickle.dump(classifier, f)
-        print('Created classifier and saved to cache.')
+        log('Created classifier and saved to cache.')
 
     dev_data = create_dev_data()
     test_classifier(classifier, dev_data)

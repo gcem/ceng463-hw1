@@ -66,7 +66,11 @@ def preprocess(lines) -> list[nltk.FreqDist]:
     lines = [' '.join([lines[i]] * 2 + [lines[i + 1]]).lower()
              for i in range(0, len(lines), 2)]
 
-    tokens = [nltk.word_tokenize(line) for line in lines]
+    # remove punctuation
+    lines = [line.translate(str.maketrans(
+        '', '', '!"#$%&\'()*+,./:;<=>?@[\\]^_`{|}~')) for line in lines]
+
+    tokens = [line.split() for line in lines]
     features = [nltk.FreqDist(line) for line in tokens]
 
     return features
@@ -184,7 +188,7 @@ def build_bayes_classifier(training_data: list[(nltk.FreqDist, str)]) -> NaiveBa
 
 
 if __name__ == "__main__":
-    filename = 'cache/classifier_bayes_lowercase.pickle'
+    filename = 'cache/classifier_bayes_lowercase_removepunc.pickle'
 
     name = filename.split('.')[0].split('/')[-1]
     log_file = 'logs/' + name + '.log'

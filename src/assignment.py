@@ -1,4 +1,5 @@
 import nltk
+import pickle
 
 from nltk.classify import NaiveBayesClassifier
 from nltk.classify import SklearnClassifier
@@ -135,15 +136,10 @@ def test_classifier(classifier, test_data):
         The classifier to test.
     test_data: list[(nltk.FreqDist, str)]
         The test data.
-
-    Returns
-    --------
-    accuracy: float
-        The accuracy of the classifier.
     """
 
     accuracy = nltk.classify.accuracy(classifier, test_data)
-    return accuracy
+    print('Accuracy:', accuracy)
 
 
 def build_bayes_classifier(training_data: list[(nltk.FreqDist, str)]) -> NaiveBayesClassifier:
@@ -166,9 +162,21 @@ def build_bayes_classifier(training_data: list[(nltk.FreqDist, str)]) -> NaiveBa
 
 
 if __name__ == "__main__":
-    training_result = create_training_data()
-    classifier = build_bayes_classifier(training_result)
+    filename = 'cache/classifier0.pickle'
+
+    # try to load the classifier from the cache
+    try:
+        with open(filename, 'rb') as f:
+            classifier = pickle.load(f)
+        print('Loaded classifier from cache.')
+    except FileNotFoundError:
+        # create the classifier
+        training_data = create_training_data()
+        classifier = build_bayes_classifier(training_data)
+        # save the classifier to the cache
+        with open(filename, 'wb') as f:
+            pickle.dump(classifier, f)
+        print('Created classifier and saved to cache.')
 
     dev_data = create_dev_data()
-    accuracy = test_classifier(classifier, dev_data)
-    print('Accuracy:', accuracy)
+    test_classifier(classifier, dev_data)

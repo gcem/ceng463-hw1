@@ -74,6 +74,14 @@ def preprocess(lines) -> list[nltk.FreqDist]:
         '', '', '!"#$%&\'()*+,./:;<=>?@[\\]^_`{|}~')) for line in lines]
 
     tokens = [line.split() for line in lines]
+
+    # remove stopwords
+    sw = nltk.corpus.stopwords.words('english')
+    sw_set = set(sw)
+
+    tokens = [[word for word in line if word not in sw_set]
+              for line in tokens]
+
     features = [nltk.FreqDist(line) for line in tokens]
 
     return features
@@ -227,7 +235,7 @@ def build_svc_classifier(training_data: list[(nltk.FreqDist, str)]) -> SklearnCl
 
 
 if __name__ == "__main__":
-    filename = 'cache/classifier_svc_lowercase_removepunc.pickle'
+    filename = 'cache/classifier_svc_lowercase_removepunc_stopword.pickle'
 
     name = filename.split('.')[0].split('/')[-1]
     log_file = 'logs/' + name + '.log'

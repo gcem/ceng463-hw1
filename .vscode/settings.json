@@ -1,0 +1,20 @@
+{
+  "spellright.language": ["English (American)", "Turkish"],
+  "spellright.documentTypes": ["markdown", "plaintext"],
+  "latex-workshop.latex.tools": [
+    {
+      "args": [
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "-pdf",
+        "-outdir=%OUTDIR%",
+        "-shell-escape",
+        "%DOC%"
+      ],
+      "command": "latexmk",
+      "env": {},
+      "name": "latexmk"
+    }
+  ]
+}

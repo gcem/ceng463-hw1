@@ -1,0 +1,14 @@
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.synctex*
+*.toc
+*.out
+*.bbl
+*.blg
+*.pygtex
+*.pylstyle
+*.pygstyle
+*_svg-tex.pdf
+*_svg-tex.pdf_tex

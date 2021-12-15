@@ -81,6 +81,10 @@ def preprocess(lines) -> list[nltk.FreqDist]:
     tokens = [[word for word in line if word not in sw_set]
               for line in tokens]
 
+    # apply stemming
+    stemmer = nltk.stem.PorterStemmer()
+    tokens = [[stemmer.stem(word) for word in line] for line in tokens]
+
     features = [nltk.FreqDist(line) for line in tokens]
 
     return features
@@ -217,7 +221,7 @@ def build_svc_classifier(training_data: list[(nltk.FreqDist, str)]) -> SklearnCl
 
 
 if __name__ == "__main__":
-    filename = 'cache/classifier_svc_lowercase_removepunc_stopword.pickle'
+    filename = 'cache/classifier_svc_lowercase_removepunc_stopword_stem.pickle'
 
     name = filename.split('.')[0].split('/')[-1]
     log_file = 'logs/' + name + '.log'

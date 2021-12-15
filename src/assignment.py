@@ -27,7 +27,7 @@ def read_file(filename) -> list[str]:
     return lines
 
 
-def preprocess(lines) -> nltk.FreqDist:
+def preprocess(lines):
     """
     Preprocess the lines and return the frequency distribution of words.
 
@@ -43,21 +43,21 @@ def preprocess(lines) -> nltk.FreqDist:
     """
 
     # duplicate title lines
-    lines = lines[::2] * 2 + lines[1::2]
-    # join all lines
-    text = ' '.join(lines)
+    lines = [' '.join(lines[i] * 2 + lines[i + 1])
+             for i in range(0, len(lines), 2)]
 
-    tokens = nltk.word_tokenize(text)
+    tokens = [nltk.word_tokenize(line) for line in lines]
+    features = [nltk.FreqDist(line) for line in tokens]
 
     # TODO: convert to lowercase?
 
     # count the number of occurrences of each word
-    word_frequency = nltk.FreqDist(tokens)
+    # word_frequency = nltk.FreqDist(tokens)
 
-    return word_frequency
+    return features
 
 
-def create_training_data() -> list[nltk.FreqDist]:
+def create_training_data():
     """
     Create training data from the training files.
         Return a list with word and category frequency distributions.
@@ -74,9 +74,7 @@ def create_training_data() -> list[nltk.FreqDist]:
         "science_train.txt", "romance_train.txt",
         "horror_train.txt", "science-fiction_train.txt"]
 
-    category_frequency = nltk.FreqDist()
-    total_word_frequency = nltk.FreqDist()
-    category_word_frequency = nltk.ConditionalFreqDist()
+    labeled_documents = []
 
     for filename in training_documents:
         # read the file
@@ -87,17 +85,10 @@ def create_training_data() -> list[nltk.FreqDist]:
         category = filename.split("_")[0]
 
         # preprocess the lines
-        word_frequency = preprocess(lines)
+        labeled_documents += [(document, category)
+                              for document in preprocess(lines)]
 
-        category_frequency[category] += document_count
-        total_word_frequency += word_frequency
-        category_word_frequency[category] += word_frequency
-
-    return {
-        "c": category_frequency,
-        "w": total_word_frequency,
-        "cw": category_word_frequency
-    }
+    return labeled_documents
 
 
 def build_bayes_classifier(training_data) -> NaiveBayesClassifier:
@@ -115,16 +106,7 @@ def build_bayes_classifier(training_data) -> NaiveBayesClassifier:
         The classifier.
     """
 
-    # get the frequency distribution of each category
-    category_frequency = training_data["c"]
-    # get the frequency distribution of the words in the whole training set
-    total_word_frequency = training_data["w"]
-    # get the frequency distribution of the words in each category
-    category_word_frequency = training_data["cw"]
-
-    item_dict = [(dict(i[1]), i[0]) for i in category_word_frequency.items()]
-
-    classifier = NaiveBayesClassifier.train(item_dict)
+    classifier = NaiveBayesClassifier.train(training_data)
     return classifier
 
 

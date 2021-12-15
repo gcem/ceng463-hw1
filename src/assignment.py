@@ -27,7 +27,7 @@ def read_file(filename) -> list[str]:
     return lines
 
 
-def preprocess(lines):
+def preprocess(lines) -> list[nltk.FreqDist]:
     """
     Preprocess the lines and return the frequency distribution of words.
 
@@ -38,7 +38,7 @@ def preprocess(lines):
 
     Returns
     --------
-    word_frequency: nltk.FreqDist
+    features: list[nltk.FreqDist]
         The frequency distribution of words.
     """
 
@@ -57,20 +57,20 @@ def preprocess(lines):
     return features
 
 
-def create_training_data():
+def create_training_data() -> list[(nltk.FreqDist, str)]:
     """
     Create training data from the training files.
         Return a list with word and category frequency distributions.
 
     Returns
     --------
-    training_data: list[nltk.FreqDist]
-        Frequency of each category, frequencies of words in the whole training set, and the frequency of each word in each category respectively.
+    labeled_documents: list[(nltk.FreqDist, str)]
+        Features in the document and the category.
     """
 
     training_documents = [
-        # "philosophy_train.txt", "sports_train.txt",
-        # "mystery_train.txt", "religion_train.txt",
+        "philosophy_train.txt", "sports_train.txt",
+        "mystery_train.txt", "religion_train.txt",
         "science_train.txt", "romance_train.txt",
         "horror_train.txt", "science-fiction_train.txt"]
 
@@ -91,14 +91,69 @@ def create_training_data():
     return labeled_documents
 
 
-def build_bayes_classifier(training_data) -> NaiveBayesClassifier:
+def create_dev_data() -> list[(nltk.FreqDist, str)]:
+    """
+    Create development data from the development files.
+        Return a list with word and category frequency distributions.
+
+    Returns
+    --------
+    labeled_documents: list[(nltk.FreqDist, str)]
+        Features in the document and the category.
+    """
+
+    dev_documents = [
+        "philosophy_dev.txt", "sports_dev.txt",
+        "mystery_dev.txt", "religion_dev.txt",
+        "science_dev.txt", "romance_dev.txt",
+        "horror_dev.txt", "science-fiction_dev.txt"]
+
+    labeled_documents = []
+
+    for filename in dev_documents:
+        # read the file
+        lines = read_file("data/dev/" + filename)
+        # get document count
+        document_count = len(lines) / 2
+        # get category name
+        category = filename.split("_")[0]
+
+        # preprocess the lines
+        labeled_documents += [(document, category)
+                              for document in preprocess(lines)]
+
+    return labeled_documents
+
+
+def test_classifier(classifier, test_data):
+    """
+    Test the classifier on the test data.
+
+    Parameters
+    -----------
+    classifier: NaiveBayesClassifier
+        The classifier to test.
+    test_data: list[(nltk.FreqDist, str)]
+        The test data.
+
+    Returns
+    --------
+    accuracy: float
+        The accuracy of the classifier.
+    """
+
+    accuracy = nltk.classify.accuracy(classifier, test_data)
+    return accuracy
+
+
+def build_bayes_classifier(training_data: list[(nltk.FreqDist, str)]) -> NaiveBayesClassifier:
     """
     Build a Naive Bayes classifier from the training data.
 
     Parameters
     -----------
-    training_data: dict[str, nltk.FreqDist]
-        Third item returned from create_training_data() 
+    training_data: list[(nltk.FreqDist, str)]
+        The training data.
 
     Returns
     --------
@@ -113,3 +168,7 @@ def build_bayes_classifier(training_data) -> NaiveBayesClassifier:
 if __name__ == "__main__":
     training_result = create_training_data()
     classifier = build_bayes_classifier(training_result)
+
+    dev_data = create_dev_data()
+    accuracy = test_classifier(classifier, dev_data)
+    print('Accuracy:', accuracy)

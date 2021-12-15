@@ -71,6 +71,11 @@ def preprocess(lines) -> list[nltk.FreqDist]:
         '', '', '!"#$%&\'()*+,./:;<=>?@[\\]^_`{|}~')) for line in lines]
 
     tokens = [line.split() for line in lines]
+
+    # remove stopwords
+    tokens = [[word for word in line if word not in nltk.corpus.stopwords.words(
+        'english')] for line in tokens]
+
     features = [nltk.FreqDist(line) for line in tokens]
 
     return features
@@ -188,7 +193,7 @@ def build_bayes_classifier(training_data: list[(nltk.FreqDist, str)]) -> NaiveBa
 
 
 if __name__ == "__main__":
-    filename = 'cache/classifier_bayes_lowercase_removepunc.pickle'
+    filename = 'cache/classifier_bayes_lowercase_removepunc_stopword.pickle'
 
     name = filename.split('.')[0].split('/')[-1]
     log_file = 'logs/' + name + '.log'

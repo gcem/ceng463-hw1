@@ -44,7 +44,7 @@ def preprocess(lines) -> list[nltk.FreqDist]:
     """
 
     # duplicate title lines
-    lines = [' '.join(lines[i] * 2 + lines[i + 1])
+    lines = [' '.join([lines[i]] * 2 + [lines[i + 1]])
              for i in range(0, len(lines), 2)]
 
     tokens = [nltk.word_tokenize(line) for line in lines]
@@ -170,7 +170,7 @@ def build_bayes_classifier(training_data: list[(nltk.FreqDist, str)]) -> NaiveBa
 
 
 if __name__ == "__main__":
-    filename = 'cache/classifier0.pickle'
+    filename = 'cache/classifier_bayes_simple.pickle'
 
     # try to load the classifier from the cache
     try:

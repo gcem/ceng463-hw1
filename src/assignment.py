@@ -75,6 +75,10 @@ def preprocess(lines) -> list[nltk.FreqDist]:
 
     tokens = [line.split() for line in lines]
 
+    # remove words shorter than 3 characters
+    # important: shouldn't do this if punctuation is not removed!!!
+    tokens = [[word for word in line if len(word) > 2] for line in tokens]
+
     # remove stopwords
     sw = nltk.corpus.stopwords.words('english')
     sw_set = set(sw)
@@ -239,7 +243,7 @@ def build_svc_classifier(training_data: list[(nltk.FreqDist, str)]) -> SklearnCl
 
 
 if __name__ == "__main__":
-    filename = 'cache/classifier_svc_lowercase_removepunc_stopword_stem.pickle'
+    filename = 'cache/classifier_svc_lowercase_removepunc_stopword_stem_3ch.pickle'
 
     name = filename.split('.')[0].split('/')[-1]
     log_file = 'logs/' + name + '.log'

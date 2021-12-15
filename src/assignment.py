@@ -126,7 +126,7 @@ def create_dev_data() -> list[(nltk.FreqDist, str)]:
     return labeled_documents
 
 
-def test_classifier(classifier, test_data):
+def test_classifier(classifier, test_data: list[(nltk.FreqDist, str)]):
     """
     Test the classifier on the test data.
 
@@ -138,8 +138,16 @@ def test_classifier(classifier, test_data):
         The test data.
     """
 
-    accuracy = nltk.classify.accuracy(classifier, test_data)
+    not_labeled = [item[0] for item in test_data]
+    correct_labels = [item[1] for item in test_data]
+    predicted_labels = classifier.classify_many(not_labeled)
+
+    correct = [a[0] == a[1] for a in zip(predicted_labels, correct_labels)]
+    accuracy = sum(correct) / len(correct)
     print('Accuracy:', accuracy)
+
+    confusion_matrix = nltk.ConfusionMatrix(correct_labels, predicted_labels)
+    print(confusion_matrix)
 
 
 def build_bayes_classifier(training_data: list[(nltk.FreqDist, str)]) -> NaiveBayesClassifier:

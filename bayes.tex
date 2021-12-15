@@ -1,2 +1,31 @@
 \section{Naive Bayes Classifier}
 \label{sec:bayes}
+
+\subsection{Simplest version}
+
+No case conversion, no punctuation removal, no stopword removal, no stemming. Used the default tokenizer from NLTK.
+
+\subsubsection{Confusion Matrix}
+\label{sec:confusion}
+
+% include data/bayes_simple.txt in a textbox
+\begin{center}
+    \begin{tcolorbox}
+        \verbatiminput{data/bayes_simple.txt}
+    \end{tcolorbox}
+\end{center}
+
+\subsubsection{Recall and Precision}
+
+Recall is the ratio of true positives for a class to the number of input documents of that type. To find recall, we divide each diagonal entry by the sum of corresponding row.
+
+Precision is the ratio of true positives for a class to the number of documents that are identified to be in that class. To calculate it, we divide diagonal entries by the sum in that column.
+
+% table of recall and precision
+\begin{center}
+    \begin{tabular}[]{c|c|c}
+               & Recall                                     & Precision                            \\
+        \hline
+        horror & $\frac{43}{43+22+4+29+5+8+7} = 0.36440678$ & $\frac{43}{43+7+2+10} = 0.693548387$ \\
+    \end{tabular}
+\end{center}

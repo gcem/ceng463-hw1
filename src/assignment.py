@@ -62,8 +62,8 @@ def preprocess(lines) -> list[nltk.FreqDist]:
         The frequency distribution of words.
     """
 
-    # duplicate title lines
-    lines = [' '.join([lines[i]] * 2 + [lines[i + 1]])
+    # duplicate title lines and convert everything to lowercase
+    lines = [' '.join([lines[i]] * 2 + [lines[i + 1]]).lower()
              for i in range(0, len(lines), 2)]
 
     tokens = [nltk.word_tokenize(line) for line in lines]
@@ -184,7 +184,7 @@ def build_bayes_classifier(training_data: list[(nltk.FreqDist, str)]) -> NaiveBa
 
 
 if __name__ == "__main__":
-    filename = 'cache/classifier_bayes_simple.pickle'
+    filename = 'cache/classifier_bayes_lowercase.pickle'
 
     name = filename.split('.')[0].split('/')[-1]
     log_file = 'logs/' + name + '.log'

@@ -5,6 +5,8 @@ import os
 from nltk.classify import NaiveBayesClassifier
 from nltk.classify import SklearnClassifier
 
+from sklearn.svm import SVC
+
 log_file = ''
 
 
@@ -183,8 +185,27 @@ def build_bayes_classifier(training_data: list[(nltk.FreqDist, str)]) -> NaiveBa
     return classifier
 
 
+def build_svc_classifier(training_data: list[(nltk.FreqDist, str)]) -> SklearnClassifier:
+    """
+    Build a Naive Bayes classifier from the training data.
+
+    Parameters
+    -----------
+    training_data: list[(nltk.FreqDist, str)]
+        The training data.
+
+    Returns
+    --------
+    classifier: SklearnClassifier
+        The classifier.
+    """
+
+    classifier = SklearnClassifier(SVC()).train(training_data)
+    return classifier
+
+
 if __name__ == "__main__":
-    filename = 'cache/classifier_bayes_simple.pickle'
+    filename = 'cache/classifier_svc_simple.pickle'
 
     name = filename.split('.')[0].split('/')[-1]
     log_file = 'logs/' + name + '.log'
@@ -200,7 +221,7 @@ if __name__ == "__main__":
     except FileNotFoundError:
         # create the classifier
         training_data = create_training_data()
-        classifier = build_bayes_classifier(training_data)
+        classifier = build_svc_classifier(training_data)
         # save the classifier to the cache
         with open(filename, 'wb') as f:
             pickle.dump(classifier, f)

@@ -163,6 +163,40 @@ def create_dev_data() -> list[(nltk.FreqDist, str)]:
     return labeled_documents
 
 
+def create_test_data() -> list[(nltk.FreqDist, str)]:
+    """
+    Create test data from the test files.
+        Return a list with word and category frequency distributions.
+
+    Returns
+    --------
+    labeled_documents: list[(nltk.FreqDist, str)]
+        Features in the document and the category.
+    """
+
+    test_documents = [
+        "philosophy_test.txt", "sports_test.txt",
+        "mystery_test.txt", "religion_test.txt",
+        "science_test.txt", "romance_test.txt",
+        "horror_test.txt", "science-fiction_test.txt"]
+
+    labeled_documents = []
+
+    for filename in test_documents:
+        # read the file
+        lines = read_file("data/test/" + filename)
+        # get document count
+        document_count = len(lines) / 2
+        # get category name
+        category = filename.split("_")[0]
+
+        # preprocess the lines
+        labeled_documents += [(document, category)
+                              for document in preprocess(lines)]
+
+    return labeled_documents
+
+
 def test_classifier(classifier, test_data: list[(nltk.FreqDist, str)]):
     """
     Test the classifier on the test data.
@@ -246,7 +280,7 @@ if __name__ == "__main__":
     filename = 'cache/classifier_svc_lowercase_removepunc_stopword_stem_3ch.pickle'
 
     name = filename.split('.')[0].split('/')[-1]
-    log_file = 'logs/' + name + '.log'
+    log_file = 'logs/' + name + '_test.log'
     # delete the log file if it exists
     if os.path.exists(log_file):
         os.remove(log_file)
@@ -266,5 +300,5 @@ if __name__ == "__main__":
             pickle.dump(classifier, f)
         log('Created classifier and saved to cache.')
 
-    dev_data = create_dev_data()
-    test_classifier(classifier, dev_data)
+    test_data = create_test_data()
+    test_classifier(classifier, test_data)

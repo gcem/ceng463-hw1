@@ -294,7 +294,7 @@ if __name__ == "__main__":
     except FileNotFoundError:
         # create the classifier
         training_data = create_training_data()
-        classifier = build_svc_classifier(training_data)
+        classifier = build_bayes_classifier(training_data)
         # save the bz2-compressed classifier to the cache
         with bz2.BZ2File(filename + '.pbz2', 'wb') as f:
             pickle.dump(classifier, f)

@@ -69,9 +69,9 @@ def preprocess(lines) -> list[nltk.FreqDist]:
     lines = [' '.join([lines[i]] * 2 + [lines[i + 1]]).lower()
              for i in range(0, len(lines), 2)]
 
-    # remove punctuation
-    lines = [line.translate(str.maketrans(
-        '', '', '!"#$%&\'()*+,./:;<=>?@[\\]^_`{|}~')) for line in lines]
+    # # remove punctuation
+    # lines = [line.translate(str.maketrans(
+    #     '', '', '!"#$%&\'()*+,./:;<=>?@[\\]^_`{|}~')) for line in lines]
 
     tokens = [line.split() for line in lines]
 
@@ -86,9 +86,9 @@ def preprocess(lines) -> list[nltk.FreqDist]:
     tokens = [[word for word in line if word not in sw_set]
               for line in tokens]
 
-    # apply stemming
-    stemmer = nltk.stem.PorterStemmer()
-    tokens = [[stemmer.stem(word) for word in line] for line in tokens]
+    # # apply stemming
+    # stemmer = nltk.stem.PorterStemmer()
+    # tokens = [[stemmer.stem(word) for word in line] for line in tokens]
 
     features = [nltk.FreqDist(line) for line in tokens]
 
@@ -277,10 +277,10 @@ def build_svc_classifier(training_data: list[(nltk.FreqDist, str)]) -> SklearnCl
 
 
 if __name__ == "__main__":
-    filename = 'cache/classifier_svc_lowercase_removepunc_stopword_stem_3ch.pickle'
+    filename = 'cache/classifier_bayes_best.pickle'
 
     name = filename.split('.')[0].split('/')[-1]
-    log_file = 'logs/' + name + '_test.log'
+    log_file = 'logs/' + name + '.log'
     # delete the log file if it exists
     if os.path.exists(log_file):
         os.remove(log_file)
@@ -300,5 +300,8 @@ if __name__ == "__main__":
             pickle.dump(classifier, f)
         log('Created classifier and saved to cache.')
 
-    test_data = create_test_data()
-    test_classifier(classifier, test_data)
+    dev_data = create_dev_data()
+    test_classifier(classifier, dev_data)
+
+    # test_data = create_test_data()
+    # test_classifier(classifier, test_data)

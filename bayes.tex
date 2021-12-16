@@ -7,7 +7,7 @@ I used the \mintinline{python}{NaiveBayesClassifier} class from the NLTK library
 
 \subsection{Metrics for different preprocessing techniques}
 
-In this section, I list the accuracies for different preprocessing techniques. I haven't tried all combinations of them, since the number grows exponentially. However, I added each technique incrementally, with the hope that the change caused by the added technique will be representative of its usefulness.
+In this section, I list the accuracies for different preprocessing techniques. I haven't tried all combinations of them, since the number grows exponentially. However, I added each technique \textbf{incrementally} (added the preprocessing step without removing previous ones), with the hope that the change caused by the added technique will be representative of its usefulness.
 
 These trials were made on the \emph{dev} set, since I did them during the development phase. The evaluation in \autoref{sec:bayes_evaluation} will be done on the \emph{test} set.
 
@@ -15,7 +15,7 @@ Complete logs from each try is available in the data directory. These include th
 
 Details of the calculation of precision, recall and $F_1\text{ measure}$ are given in \autoref{sec:bayes_evaluation}.
 
-A table of the accuracies for each technique is in \autoref{tab:bayes_table}.
+A table of the accuracies for each technique is in \autoref{tab:bayes_table}. As seen in the table, each techniques improved the accuracy in SVC. But for Naive Bayes, removing the punctuation and stemming caused a decrease in accuracy.
 
 % table of accuracies
 \begin{table}[ht]
@@ -24,33 +24,33 @@ A table of the accuracies for each technique is in \autoref{tab:bayes_table}.
     \label{tab:bayes_table}
     \vspace{1em}
     \begin{tabular}[htpb]{c|c|c}
-        Preprocessing type             & \multicolumn{2}{c}{Accuracy} \\
-        \hline
-                                       &
+        \multirow{2}{*}{Preprocessing type} & \multicolumn{2}{c}{Accuracy (\%)} \\
+        \cline{2-3}
+                                            &
         Naive Bayes
-                                       & Support Vector               \\
+                                            & Support Vector                    \\
         \hline\hline
         \nameref{sec:bayes_simple}
-                                       & $0.6420$
-                                       & $0.6409$                     \\
+                                            & $64.20$
+                                            & $64.09$                           \\
         \hline
         \nameref{sec:bayes_lowercase}
-                                       & $0.6592$
-                                       & $0.6677$                     \\
+                                            & $65.92$
+                                            & $66.77$                           \\
         \hline
         \nameref{sec:bayes_punctuation}
-                                       & $0.6538$
-                                       & $0.6870$                     \\
+                                            & $65.38$
+                                            & $68.70$                           \\
         \hline
         \nameref{sec:bayes_stopwords}
-                                       & $0.6763$
-                                       & $0.7074$                     \\
+                                            & $67.63$
+                                            & $70.74$                           \\
         \hline
-        \nameref{sec:bayes_stemming}   & $0.6667$
-                                       & $0.7234$                     \\
+        \nameref{sec:bayes_stemming}        & $66.67$
+                                            & $72.34$                           \\
         \hline
-        \nameref{sec:bayes_shortwords} & $0.6699$
-                                       & $0.7278$                     \\
+        \nameref{sec:bayes_shortwords}      & $66.99$
+                                            & $72.78$                           \\
     \end{tabular}
 \end{table}
 

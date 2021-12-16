@@ -94,7 +94,7 @@ def preprocess(lines) -> list[nltk.FreqDist]:
     features = [nltk.FreqDist(line) for line in tokens]
 
     # take the logarithm of the frequency distribution
-    features = [{word: math.log(freq + 1) for word, freq in fdist.items()}
+    features = [{word: math.log(freq + 3) for word, freq in fdist.items()}
                 for fdist in features]
 
     return features
@@ -282,7 +282,7 @@ def build_svc_classifier(training_data: list[(nltk.FreqDist, str)]) -> SklearnCl
 
 
 if __name__ == "__main__":
-    filename = 'cache/classifier_bayes_best_logarithm.pickle'
+    filename = 'cache/classifier_bayes_best_logarithm_plus3.pickle'
 
     name = filename.split('.')[0].split('/')[-1]
     log_file = 'logs/' + name + '_test.log'

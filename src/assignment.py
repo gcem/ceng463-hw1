@@ -1,6 +1,7 @@
 import nltk
 import pickle
 import os
+import bz2
 
 from nltk.classify import NaiveBayesClassifier
 from nltk.classify import SklearnClassifier
@@ -252,15 +253,16 @@ if __name__ == "__main__":
 
     # try to load the classifier from the cache
     try:
-        with open(filename, 'rb') as f:
+        # load bz2-compressed pickle file
+        with bz2.BZ2File(filename + '.pbz2', 'rb') as f:
             classifier = pickle.load(f)
         log('Loaded classifier from cache.')
     except FileNotFoundError:
         # create the classifier
         training_data = create_training_data()
         classifier = build_svc_classifier(training_data)
-        # save the classifier to the cache
-        with open(filename, 'wb') as f:
+        # save the bz2-compressed classifier to the cache
+        with bz2.BZ2File(filename + '.pbz2', 'wb') as f:
             pickle.dump(classifier, f)
         log('Created classifier and saved to cache.')
 

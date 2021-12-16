@@ -1,8 +1,13 @@
 \section{Introduction}
 
-In this assignment, I used the \mintinline{python}{NaiveBayesClassifier} class from the NLTK library for Naive Bayes Classifier, and \mintinline{python}{SklearnClassifier} class from NLTK along with \mintinline{python}{SVC} class from scikit-learn for the Support Vector Classifier. I have tried various preprocessing operations, and logged the accuracy at each step, along with the confusion matrix and metrics such as precision.
+In this assignment, I used the \mintinline{python}{NaiveBayesClassifier} class from the NLTK library for Naive Bayes Classifier, and \mintinline{python}{SklearnClassifier} class from NLTK along with \mintinline{python}{SVC} class from scikit-learn for the Support Vector Classifier.
+
+I have tried various preprocessing operations, and logged the accuracy at each step, along with the confusion matrix and metrics such as precision.
+
+For the most of the assignment, I used the count of single words as features. In the end, I tried changing the features to bigrams. I list its results at the end of this report.
 
 \section{Different preprocessing operations}
+\label{sec:preprocessing}
 
 In this section, I list the accuracies for different preprocessing techniques. I haven't tried all combinations of them, since the number grows exponentially. However, I added each technique \textbf{incrementally} (added the preprocessing step without removing previous ones), with the hope that the change caused by the added technique will be representative of its usefulness.
 
@@ -12,7 +17,7 @@ Complete logs from each try is available in the data directory. These include th
 
 Details of the calculation of precision, recall and $F_1\text{ measure}$ are given in \nameref{sec:calculation_metrics}.
 
-A table of the accuracies for each technique is in \autoref{tab:bayes_table}. As seen in the table, each techniques improved the accuracy in SVC. But for Naive Bayes, removing the punctuation and stemming caused a decrease in accuracy.
+A table of the accuracies for each technique is in \autoref{tab:bayes_table}. I recorded these values during development, so these are for the \emph{dev} set. As seen in the table, each techniques improved the accuracy in SVC. But for Naive Bayes, removing the punctuation and stemming caused a decrease in accuracy.
 
 % table of accuracies
 \begin{table}[ht]
@@ -100,6 +105,8 @@ I thought stopword removal should have been enough, but I also tried removing wo
 \section{Evaluation}
 \label{sec:evaluation}
 
+I evaluated the classifiers with the best preprocessing operations based on the \emph{dev} set. For SVC, I kept all the operations listed in \nameref{sec:preprocessing}. For NB, I deleted the stemming and punctuation removal code.
+
 \subsection{Calculation of metrics}
 \label{sec:calculation_metrics}
 
@@ -107,27 +114,75 @@ Recall is the ratio of true positives for a class to the number of input documen
 
 Precision is the ratio of true positives for a class to the number of documents that are identified to be in that class. To calculate it, we divide diagonal entries by the sum in that column.
 
-\subsection{Metrics for SVC and NBC}
+$F_1\text{ measure}$ is the harmonic mean of precision and recall.
 
-The confusion matrix and accuracy of the classifiers; along with the precision, recall and $F_1\text{ measure}$ for each category are given in \autoref{fig:svc_best_metrics} and \autoref{fig:bayes_best_metrics}.
-
-Confusion matrices here were created by the \mintinline{python}{nltk.classify.util.ConfusionMatrix} class from the NLTK library.
-
-Per-category metrics were calculated as follows:
+These three per-category metrics listed in \nameref{sec:metrics_svc_nbc} were calculated by the following code:
 \inputminted[]{python}{metrics.py}
 
+Confusion matrices were created by the \mintinline{python}{nltk.classify.util.ConfusionMatrix} class from the NLTK library.
+
+\subsection{Metrics for SVC and NBC}
+\label{sec:metrics_svc_nbc}
+
+The confusion matrix and accuracy of the classifiers; along with the precision, recall and $F_1\text{ measure}$ for each category are given in \autoref{fig:bayes_best_metrics} and \autoref{fig:svc_best_metrics}.
+
+
 \begin{figure}[htpb]
-    \caption{Metrics for the best SVC version on test data set}
-    \label{fig:svc_best_metrics}
-    \begin{tcolorbox}
-        \verbatiminput{data/classifier_svc_lowercase_removepunc_stopword_stem_3ch_test.log}
+    \caption{Confusion matrix and other metrics for the best NB version on test data set}
+    \label{fig:bayes_best_metrics}
+    \begin{tcolorbox}[title=NB - Bag of words]
+        \verbatiminput{data/classifier_bayes_best_test.log}
     \end{tcolorbox}
 \end{figure}
 
 \begin{figure}[htpb]
-    \caption{Metrics for the best NB version on test data set}
-    \label{fig:bayes_best_metrics}
-    \begin{tcolorbox}
-        \verbatiminput{data/classifier_bayes_best_test.log}
+    \caption{Confusion matrix and other metrics for the best SVC version on test data set}
+    \label{fig:svc_best_metrics}
+    \begin{tcolorbox}[title=SVC - Bag of words]
+        \verbatiminput{data/classifier_svc_lowercase_removepunc_stopword_stem_3ch_test.log}
+    \end{tcolorbox}
+\end{figure}
+
+\section{Comparison}
+
+NB and SVC have a similar accuracy with this choice of features. However, they respond to changes in the preprocessing step differently.
+
+\section{Discussion of confusion matrices}
+
+As the matrices in \autoref{fig:bayes_best_metrics} and \autoref{fig:svc_best_metrics} show, some genres are more difficult to distinguish.
+
+For example, horror and science-fiction books are not distinguished by NB very precisely. Similarly, many mystery books were classified by the NBC as horror books. But not as many horror books were not classified as mystery books. This shows that the classifier tends to choose horror more often, when the description is not very helpful.
+
+There are also genres that are easily distinguished. For example, no mystery or horror books were classified wrongly as philosophy books by NBC. Similarly, three are very few false positives for the sports category.
+
+\section{A different choice of features}
+
+I followed a "bag of words" approach in the tests mentioned above. I used the single words (or punctuation characters) as features, along with their counts.
+
+In this section, I will show the results I got, when I used word pairs as features. This is similar to the 2-gram language models we discussed.
+
+I implemented this change on the final versions of the code discussed above. That is, I combined the adjacent words after removing stopwords.
+
+In Naive Bayes Classifier, this gave a decent result, but it wasn't as good as the results from the bag of words approach. In the SVC, results were horrible. About all documents were being classified as "horror", which was the first in the list of labels. I tried SVC without stemming, but it didn't help.
+
+Results of this modification are shown in \autoref{fig:bayes_wordpair_test} and \autoref{fig:svc_nbc_wordpair_test}.
+
+\
+
+\begin{figure}[htpb]
+    \caption{NB with word pairs as features}
+    \label{fig:bayes_wordpair_test}
+    \begin{tcolorbox}[colback=red!30!white,
+            title=NB - Word pairs]
+        \verbatiminput{data/feature_bayes_best_test.log}
+    \end{tcolorbox}
+\end{figure}
+
+\begin{figure}[htpb]
+    \caption{SVC with word pairs as features}
+    \label{fig:svc_nbc_wordpair_test}
+    \begin{tcolorbox}[colback=red!30!white,
+            title=SVC - Word pairs]
+        \verbatiminput{data/feature_svc_lowercase_removepunc_stopword_stem_3ch_test.log}
     \end{tcolorbox}
 \end{figure}

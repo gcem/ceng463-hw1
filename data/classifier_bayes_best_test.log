@@ -1,5 +1,5 @@
-Loaded classifier from cache.
-Accuracy: 0.6738197424892703
+Created classifier and saved to cache.
+Accuracy: 0.6625536480686696
                 |                           s     |
                 |                           c     |
                 |                           i     |
@@ -16,14 +16,14 @@ Accuracy: 0.6738197424892703
                 |   o   r   h   o   c   c   o   t |
                 |   r   y   y   n   e   e   n   s |
 ----------------+---------------------------------+
-         horror |<164> 19   .   3  18   2  27   1 |
-        mystery |  34<171>  .   4  14   .  15   2 |
-     philosophy |   4   2<147> 32   3  30   9   1 |
-       religion |  13   5  46<132>  2  13  19   . |
-        romance |  19   9   1   .<148>  .  26  25 |
-        science |   4   6  26  12   .<166> 16   . |
-science-fiction |  35  11   6   3  11   8<165>  1 |
-         sports |  14   1   1   2  41   6   6<163>|
+         horror |<107> 42   .   4  47   7  17  10 |
+        mystery |  17<179>  1   1  31   3   2   6 |
+     philosophy |   1   .<120> 42   1  59   4   1 |
+       religion |   3   4  32<151>  6  20   8   6 |
+        romance |   2   3   .   4<157>  .  10  52 |
+        science |   1   1  16   9   .<197>  4   2 |
+science-fiction |  26  12   2   6  31  32<118> 13 |
+         sports |   .   .   .   1  23   4   .<206>|
 ----------------+---------------------------------+
 (row = reference; col = test)
 
@@ -31,11 +31,11 @@ science-fiction |  35  11   6   3  11   8<165>  1 |
 
                  |  Precision  |     Recall  | F1-Measure 
 -------------------------------------------------------------
-         horror  |     0.5714  |     0.7009  |     0.6296
-        mystery  |     0.7634  |     0.7125  |     0.7371
-     philosophy  |     0.6476  |     0.6447  |     0.6462
-       religion  |     0.7021  |     0.5739  |     0.6316
-        romance  |     0.6245  |     0.6491  |     0.6366
-        science  |     0.7378  |     0.7217  |     0.7297
-science-fiction  |     0.5830  |     0.6875  |     0.6310
-         sports  |     0.8446  |     0.6966  |     0.7635
+     philosophy  |     0.7018  |     0.5263  |     0.6015
+         sports  |     0.6959  |     0.8803  |     0.7774
+        mystery  |     0.7427  |     0.7458  |     0.7443
+       religion  |     0.6927  |     0.6565  |     0.6741
+        science  |     0.6118  |     0.8565  |     0.7138
+        romance  |     0.5304  |     0.6886  |     0.5992
+         horror  |     0.6815  |     0.4573  |     0.5473
+science-fiction  |     0.7239  |     0.4917  |     0.5856

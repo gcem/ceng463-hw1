@@ -7,6 +7,7 @@ from nltk.classify import NaiveBayesClassifier
 from nltk.classify import SklearnClassifier
 
 from sklearn.svm import SVC
+from sklearn.naive_bayes import MultinomialNB
 
 log_file = ''
 
@@ -253,7 +254,7 @@ def build_bayes_classifier(training_data: list[(nltk.FreqDist, str)]) -> NaiveBa
         The classifier.
     """
 
-    classifier = NaiveBayesClassifier.train(training_data)
+    classifier = SklearnClassifier(MultinomialNB()).train(training_data)
     return classifier
 
 
@@ -277,7 +278,7 @@ def build_svc_classifier(training_data: list[(nltk.FreqDist, str)]) -> SklearnCl
 
 
 if __name__ == "__main__":
-    filename = 'cache/classifier_bayes_best.pickle'
+    filename = 'cache/classifier_bayes_best_multi.pickle'
 
     name = filename.split('.')[0].split('/')[-1]
     log_file = 'logs/' + name + '_test.log'

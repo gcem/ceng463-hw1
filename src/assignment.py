@@ -280,7 +280,7 @@ if __name__ == "__main__":
     filename = 'cache/classifier_bayes_best.pickle'
 
     name = filename.split('.')[0].split('/')[-1]
-    log_file = 'logs/' + name + '.log'
+    log_file = 'logs/' + name + '_test.log'
     # delete the log file if it exists
     if os.path.exists(log_file):
         os.remove(log_file)
@@ -300,8 +300,5 @@ if __name__ == "__main__":
             pickle.dump(classifier, f)
         log('Created classifier and saved to cache.')
 
-    dev_data = create_dev_data()
-    test_classifier(classifier, dev_data)
-
-    # test_data = create_test_data()
-    # test_classifier(classifier, test_data)
+    test_data = create_test_data()
+    test_classifier(classifier, test_data)

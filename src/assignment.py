@@ -73,7 +73,7 @@ def preprocess(lines) -> list[nltk.FreqDist]:
     lines = [line.translate(str.maketrans(
         '', '', '!"#$%&\'()*+,./:;<=>?@[\\]^_`{|}~')) for line in lines]
 
-    tokens = [nltk.word_tokenize(line) for line in lines]
+    tokens = [line.split() for line in lines]
 
     # remove words shorter than 3 characters
     # important: shouldn't do it this way if punctuation is not removed!!!

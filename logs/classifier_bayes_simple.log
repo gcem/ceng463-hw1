@@ -1,5 +1,5 @@
-Created classifier and saved to cache.
-Accuracy: 0.6538049303322615
+Loaded classifier from cache.
+Accuracy: 0.6420150053590568
                 |                           s     |
                 |                           c     |
                 |                           i     |
@@ -16,14 +16,26 @@ Accuracy: 0.6538049303322615
                 |   o   r   h   o   c   c   o   t |
                 |   r   y   y   n   e   e   n   s |
 ----------------+---------------------------------+
-         horror | <43> 22   .   4  29   5   8   7 |
-        mystery |   7 <93>  .   .  13   .   1   6 |
-     philosophy |   .   2 <45> 21   .  45   1   . |
-       religion |   .   4  13 <76>  5  11   2   4 |
-        romance |   2   1   .   3 <88>  1   3  16 |
-        science |   .   .   1   3   .<106>  4   1 |
-science-fiction |  10   8   .   3  26  12 <55>  6 |
-         sports |   .   .   1   .  10   2   .<104>|
+         horror | <44> 23   .   3  27   6   8   7 |
+        mystery |   8 <88>  .   .  18   .   1   5 |
+     philosophy |   .   2 <44> 20   .  47   1   . |
+       religion |   .   3  13 <76>  4  12   3   4 |
+        romance |   1   3   .   3 <82>  2   4  19 |
+        science |   .   .   .   3   .<107>  4   1 |
+science-fiction |  11   7   .   3  23  15 <52>  9 |
+         sports |   .   .   .   .   8   3   .<106>|
 ----------------+---------------------------------+
 (row = reference; col = test)
 
+
+
+                 |  Precision  |     Recall  | F1-Measure 
+-------------------------------------------------------------
+     philosophy  |     0.7719  |     0.3860  |     0.5146
+         sports  |     0.7020  |     0.9060  |     0.7910
+        mystery  |     0.6984  |     0.7333  |     0.7154
+       religion  |     0.7037  |     0.6609  |     0.6816
+        science  |     0.5573  |     0.9304  |     0.6971
+        romance  |     0.5062  |     0.7193  |     0.5942
+         horror  |     0.6875  |     0.3729  |     0.4835
+science-fiction  |     0.7123  |     0.4333  |     0.5389

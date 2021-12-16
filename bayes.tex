@@ -15,10 +15,47 @@ Complete logs from each try is available in the data directory. These include th
 
 Details of the calculation of precision, recall and $F_1\text{ measure}$ are given in \autoref{sec:bayes_evaluation}.
 
-A table of the accuracies for each technique is in \autoref{fig:bayes_table}.
+A table of the accuracies for each technique is in \autoref{tab:bayes_table}.
+
+% table of accuracies
+\begin{table}[ht]
+    \centering
+    \caption{Accuracies for different preprocessing techniques.}
+    \label{tab:bayes_table}
+    \vspace{1em}
+    \begin{tabular}[htpb]{c|c|c}
+        Preprocessing type             & \multicolumn{2}{c}{Accuracy} \\
+        \hline
+                                       &
+        Naive Bayes
+                                       & Support Vector               \\
+        \hline\hline
+        \nameref{sec:bayes_simple}
+                                       & $0.6420$
+                                       & $0.6409$                     \\
+        \hline
+        \nameref{sec:bayes_lowercase}
+                                       & $0.6592$
+                                       & $0.6677$                     \\
+        \hline
+        \nameref{sec:bayes_punctuation}
+                                       & $0.6538$
+                                       & $0.6870$                     \\
+        \hline
+        \nameref{sec:bayes_stopwords}
+                                       & $0.6763$
+                                       & $0.7074$                     \\
+        \hline
+        \nameref{sec:bayes_stemming}   & $0.6667$
+                                       & $0.7234$                     \\
+        \hline
+        \nameref{sec:bayes_shortwords} & $0.6699$
+                                       & $0.7278$                     \\
+    \end{tabular}
+\end{table}
 
 \subsubsection{Simplest version}
-\label{sec:bayes_simplest}
+\label{sec:bayes_simple}
 
 The words in title are counted twice --- in this version and in all the following ones. Other than this, there is no processing in this version. The text is given to \mintinline{python}{nltk.word_tokenize()} and the resulting tokens are used to train the classifier.
 
@@ -32,6 +69,34 @@ Accuracy in this version is $64.2\%$. Confusion matrix and other metrics for eac
         \verbatiminput{data/classifier_bayes_simple.log}
     \end{tcolorbox}
 \end{figure}
+
+\subsubsection{Lowercase conversion}
+\label{sec:bayes_lowercase}
+
+Converted all words to lowercase.
+
+\subsubsection{Punctuation removal}
+\label{sec:bayes_punctuation}
+
+Removed the following characters from the text:
+\verbatiminput{punctuation.txt}
+
+I did not replace them with spaces, but simply removed them. This made, for example, the text \emph{Sophies's} to become the single word \emph{sophies}.
+
+\subsubsection{Stopword removal}
+\label{sec:bayes_stopwords}
+
+I used the corpus \mintinline{python}{nltk.corpus.stopwords.words('english')} from the NLTK library. I removed every word that occured in this list.
+
+\subsubsection{Stemming}
+\label{sec:bayes_stemming}
+
+I passed each word to the \mintinline{python}{nltk.stem.PorterStemmer()} from the NLTK library.
+
+\subsubsection{Removing short words}
+\label{sec:bayes_shortwords}
+
+I thought stopword removal should have been enough, but I also tried removing words that were shorter than 3 characters. This resulted in a small increase in accuracy.
 
 \subsection{Evaluation}
 \label{sec:bayes_evaluation}

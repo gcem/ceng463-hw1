@@ -2,6 +2,7 @@ import nltk
 import pickle
 import os
 import bz2
+import math
 
 from nltk.classify import NaiveBayesClassifier
 from nltk.classify import SklearnClassifier
@@ -92,6 +93,10 @@ def preprocess(lines) -> list[nltk.FreqDist]:
     # tokens = [[stemmer.stem(word) for word in line] for line in tokens]
 
     features = [nltk.FreqDist(line) for line in tokens]
+
+    # take logarithms of frequencies
+    features = [{word: math.log(freq + 1) for word, freq in line.items()}
+                for line in features]
 
     return features
 
@@ -278,7 +283,7 @@ def build_svc_classifier(training_data: list[(nltk.FreqDist, str)]) -> SklearnCl
 
 
 if __name__ == "__main__":
-    filename = 'cache/classifier_bayes_best_multi.pickle'
+    filename = 'cache/classifier_bayes_best_multi_logarithm.pickle'
 
     name = filename.split('.')[0].split('/')[-1]
     log_file = 'logs/' + name + '_test.log'

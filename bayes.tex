@@ -1,19 +1,16 @@
-\section{Naive Bayes Classifier}
-\label{sec:bayes}
-
-\subsection{Introduction}
+\section{Introduction}
 
 I used the \mintinline{python}{NaiveBayesClassifier} class from the NLTK library. I have tried various preprocessing techniques, and logged the accuracy along with the confusion matrix and metrics such as precision.
 
-\subsection{Metrics for different preprocessing techniques}
+\section{Different preprocessing operations}
 
 In this section, I list the accuracies for different preprocessing techniques. I haven't tried all combinations of them, since the number grows exponentially. However, I added each technique \textbf{incrementally} (added the preprocessing step without removing previous ones), with the hope that the change caused by the added technique will be representative of its usefulness.
 
-These trials were made on the \emph{dev} set, since I did them during the development phase. The evaluation in \autoref{sec:evaluation} will be done on the \emph{test} set.
+These trials were made on the \emph{dev} set, since I did them during the development phase. The evaluation in \nameref{sec:evaluation} will be done on the \emph{test} set.
 
 Complete logs from each try is available in the data directory. These include the confusion matrix, accuracy, and for each category the precision, recall and $F_1\text{ measure}$. I include only the last log here, to keep this report short.
 
-Details of the calculation of precision, recall and $F_1\text{ measure}$ are given in \autoref{sec:evaluation}.
+Details of the calculation of precision, recall and $F_1\text{ measure}$ are given in \nameref{sec:calculation_metrics}.
 
 A table of the accuracies for each technique is in \autoref{tab:bayes_table}. As seen in the table, each techniques improved the accuracy in SVC. But for Naive Bayes, removing the punctuation and stemming caused a decrease in accuracy.
 
@@ -54,13 +51,13 @@ A table of the accuracies for each technique is in \autoref{tab:bayes_table}. As
     \end{tabular}
 \end{table}
 
-\subsubsection{Simplest version}
+\subsection{Simplest version}
 \label{sec:simple}
 
 The words in title are counted twice --- in this version and in all the following ones. Other than this, there is no processing in this version. The text is given to \mintinline{python}{nltk.word_tokenize()} and the resulting tokens are used to train the classifier.
 
 
-\subsubsection{Lowercase conversion}
+\subsection{Lowercase conversion}
 \label{sec:lowercase}
 
 Converted all words to lowercase.
@@ -69,7 +66,7 @@ This improved accuracy in both SVC and NBC. I think this is because our corpus s
 
 I think, on a larger corpus, keeping the case could be more beneficial, since it would allow us to distinguish the words in the title from the words in the body.
 
-\subsubsection{Punctuation removal}
+\subsection{Punctuation removal}
 \label{sec:punctuation}
 
 Removed the following characters from the text:
@@ -81,32 +78,43 @@ Removing the punctuation caused a decrease in the accuracy of NB classifier. I w
 
 SVC's accuracy increased.
 
-\subsubsection{Stopword removal}
+\subsection{Stopword removal}
 \label{sec:stopwords}
 
 I used the corpus \mintinline{python}{nltk.corpus.stopwords.words('english')} from the NLTK library. I removed every word that occured in this list.
 
 This improved the accuracy of both classifiers.
 
-\subsubsection{Stemming}
+\subsection{Stemming}
 \label{sec:stemming}
 
 I passed each word to the \mintinline{python}{nltk.stem.PorterStemmer()} from the NLTK library.
 
 This decreased the accuracy of NB, and resulted in a significant improvement in SVC.
 
-\subsubsection{Removing short words}
+\subsection{Removing short words}
 \label{sec:shortwords}
 
 I thought stopword removal should have been enough, but I also tried removing words that were shorter than 3 characters. Surprizingly, this resulted in an increase in the accuracy of both classifiers.
 
-\subsection{Evaluation}
+\section{Evaluation}
 \label{sec:evaluation}
 
-\subsubsection{Calculation of metrics}
+\subsection{Calculation of metrics}
+\label{sec:calculation_metrics}
+
 Recall is the ratio of true positives for a class to the number of input documents of that type. To find recall, we divide each diagonal entry by the sum of corresponding row.
 
 Precision is the ratio of true positives for a class to the number of documents that are identified to be in that class. To calculate it, we divide diagonal entries by the sum in that column.
+
+\subsection{Metrics for SVC and NBC}
+
+The confusion matrix and accuracy of the classifiers; along with the precision, recall and $F_1\text{ measure}$ for each category are given in \autoref{fig:svc_best_metrics} and \autoref{fig:bayes_best_metrics}.
+
+Confusion matrices here were created by the \mintinline{python}{nltk.classify.util.ConfusionMatrix} class from the NLTK library.
+
+Per-category metrics were calculated as follows:
+\inputminted[]{python}{metrics.py}
 
 \begin{figure}[htpb]
     \caption{Metrics for the best SVC version on test data set}

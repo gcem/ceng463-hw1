@@ -155,7 +155,7 @@ For example, horror and science-fiction books are not distinguished by NB very p
 
 There are also genres that are easily distinguished. For example, no mystery or horror books were classified wrongly as philosophy books by NBC. Similarly, three are very few false positives for the sports category.
 
-\section{A different choice of features}
+\section{Bigrams as features}
 
 I followed a "bag of words" approach in the tests mentioned above. I used the single words (or punctuation characters) as features, along with their counts.
 
@@ -165,7 +165,7 @@ I implemented this change on the final versions of the code discussed above. Tha
 
 In Naive Bayes Classifier, this gave a decent result, but it wasn't as good as the results from the bag of words approach. In the SVC, results were horrible. About all documents were being classified as "horror", which was the first in the list of labels. I tried SVC without stemming, but it didn't help.
 
-Results of this modification are shown in \autoref{fig:bayes_wordpair_test} and \autoref{fig:svc_nbc_wordpair_test}.
+Results of this modification are shown in \autoref{fig:bayes_wordpair_test} and \autoref{fig:svc_nbc_wordpair_test} with red background.
 
 \
 

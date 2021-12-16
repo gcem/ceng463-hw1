@@ -1,3 +1,9 @@
+# NOTE - This is the final version of the code. I recorded log files while I
+# modifying the code. I can share the git repository by e-mail, if you
+# would like to see those previous changes.
+#
+# - Cem Gundogdu
+
 import nltk
 import pickle
 import os

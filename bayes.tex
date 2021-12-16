@@ -167,8 +167,6 @@ In Naive Bayes Classifier, this gave a decent result, but it wasn't as good as t
 
 Results of this modification are shown in \autoref{fig:bayes_wordpair_test} and \autoref{fig:svc_nbc_wordpair_test} with red background.
 
-\
-
 \begin{figure}[htpb]
     \caption{NB with word pairs as features}
     \label{fig:bayes_wordpair_test}
@@ -184,5 +182,20 @@ Results of this modification are shown in \autoref{fig:bayes_wordpair_test} and 
     \begin{tcolorbox}[colback=red!30!white,
             title=SVC - Word pairs]
         \verbatiminput{data/feature_svc_lowercase_removepunc_stopword_stem_3ch_test.log}
+    \end{tcolorbox}
+\end{figure}
+
+\section{Logarithm of word counts in Naive Bayes}
+
+I also tried taking the logarithm of word counts before passing them to the Naive Bayes Classifier. I thought using logarithms was a good idea, since it is not that important, whether a word occurs 10 times or 20 times.
+
+This method gave a slightly worse result. The results are shown in \autoref{fig:bayes_log_test} with green background.
+
+\begin{figure}[htpb]
+    \caption{Bayes with the logarithm of word counts}
+    \label{fig:bayes_log_test}
+    \begin{tcolorbox}[colback=green!30!white,
+            title=SVC - Word pairs]
+        \verbatiminput{data/classifier_bayes_best_logarithm_test.log}
     \end{tcolorbox}
 \end{figure}

@@ -185,6 +185,23 @@ def test_classifier(classifier, test_data: list[(nltk.FreqDist, str)]):
     confusion_matrix = nltk.ConfusionMatrix(correct_labels, predicted_labels)
     log(confusion_matrix.pretty_format())
 
+    log('\n\n%15s  | %10s  | %10s  | %10s \n-------------------------------------------------------------' % ('',
+        'Precision', 'Recall', 'F1-Measure'))
+    for label in classifier.labels():
+        true_positives = sum([(a[0] == label) & (a[1] == label)
+                             for a in zip(predicted_labels, correct_labels)])
+        false_positives = sum([(a[0] == label) & (a[1] != label)
+                              for a in zip(predicted_labels, correct_labels)])
+        false_negatives = sum([(a[0] != label) & (a[1] == label)
+                              for a in zip(predicted_labels, correct_labels)])
+
+        precision = true_positives / (true_positives + false_positives)
+        recall = true_positives / (true_positives + false_negatives)
+        f1_measure = 2 * precision * recall / (precision + recall)
+
+        log('%15s  | %10.4f  | %10.4f  | %10.4f' % (
+            label, precision, recall, f1_measure))
+
 
 def build_bayes_classifier(training_data: list[(nltk.FreqDist, str)]) -> NaiveBayesClassifier:
     """

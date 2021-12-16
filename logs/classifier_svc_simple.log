@@ -1,4 +1,4 @@
-Created classifier and saved to cache.
+Loaded classifier from cache.
 Accuracy: 0.6409431939978564
                 |                    s    |
                 |                    c    |
@@ -27,3 +27,15 @@ science-fiction | 22  6  3  1  8  2<76> 2 |
 ----------------+-------------------------+
 (row = reference; col = test)
 
+
+
+                 |  Precision  |     Recall  | F1-Measure 
+-------------------------------------------------------------
+         horror  |     0.4648  |     0.5593  |     0.5077
+        mystery  |     0.7009  |     0.6250  |     0.6608
+     philosophy  |     0.5917  |     0.6228  |     0.6068
+       religion  |     0.6559  |     0.5304  |     0.5865
+        romance  |     0.6417  |     0.6754  |     0.6581
+        science  |     0.7857  |     0.7652  |     0.7753
+science-fiction  |     0.5672  |     0.6333  |     0.5984
+         sports  |     0.8000  |     0.7179  |     0.7568

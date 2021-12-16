@@ -1,31 +1,42 @@
 \section{Naive Bayes Classifier}
 \label{sec:bayes}
 
-\subsection{Simplest version}
+\subsection{Introduction}
 
-No case conversion, no punctuation removal, no stopword removal, no stemming. Used the default tokenizer from NLTK.
+I used the \mintinline{python}{NaiveBayesClassifier} class from the NLTK library. I have tried various preprocessing techniques, and logged the accuracy along with the confusion matrix and metrics such as precision.
 
-\subsubsection{Confusion Matrix}
-\label{sec:confusion}
+\subsection{Metrics for different preprocessing techniques}
+
+In this section, I list the accuracies for different preprocessing techniques. I haven't tried all combinations of them, since the number grows exponentially. However, I added each technique incrementally, with the hope that the change caused by the added technique will be representative of its usefulness.
+
+These trials were made on the \emph{dev} set, since I did them during the development phase. The evaluation in \autoref{sec:bayes_evaluation} will be done on the \emph{test} set.
+
+Complete logs from each try is available in the data directory. These include the confusion matrix, accuracy, and for each category the precision, recall and $F_1\text{ measure}$. I include only the last log here, to keep this report short.
+
+Details of the calculation of precision, recall and $F_1\text{ measure}$ are given in \autoref{sec:bayes_evaluation}.
+
+A table of the accuracies for each technique is in \autoref{fig:bayes_table}.
+
+\subsubsection{Simplest version}
+\label{sec:bayes_simplest}
+
+The words in title are counted twice --- in this version and in all the following ones. Other than this, there is no processing in this version. The text is given to \mintinline{python}{nltk.word_tokenize()} and the resulting tokens are used to train the classifier.
+
+Accuracy in this version is $64.2\%$. Confusion matrix and other metrics for each category are listed in \autoref{fig:bayes_simplest_metrics}.
 
 % include data/bayes_simple.txt in a textbox
-\begin{center}
+\begin{figure}[htpb]
     \begin{tcolorbox}
-        \verbatiminput{data/bayes_simple.txt}
+        \verbatiminput{data/classifier_bayes_simple.log}
     \end{tcolorbox}
-\end{center}
+    \caption{Metrics for the simplest version}
+    \label{fig:bayes_simplest_metrics}
+\end{figure}
 
-\subsubsection{Recall and Precision}
+\subsection{Evaluation}
+\label{sec:bayes_evaluation}
 
+\subsubsection{Calculation of metrics}
 Recall is the ratio of true positives for a class to the number of input documents of that type. To find recall, we divide each diagonal entry by the sum of corresponding row.
 
 Precision is the ratio of true positives for a class to the number of documents that are identified to be in that class. To calculate it, we divide diagonal entries by the sum in that column.
-
-% table of recall and precision
-\begin{center}
-    \begin{tabular}[]{c|c|c}
-               & Recall                                     & Precision                            \\
-        \hline
-        horror & $\frac{43}{43+22+4+29+5+8+7} = 0.36440678$ & $\frac{43}{43+7+2+10} = 0.693548387$ \\
-    \end{tabular}
-\end{center}

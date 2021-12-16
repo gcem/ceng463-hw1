@@ -12,3 +12,4 @@
 *.pygstyle
 *_svg-tex.pdf
 *_svg-tex.pdf_tex
+!data/*
